@@ -379,12 +379,12 @@ api_integration:
 
 | Plugin | Description | Downloads |
 |:------:|:------------|:---------:|
-| **🌤️ Weather Pro** | Advanced weather with radar | 15K+ |
-| **🎵 Spotify Control** | Music control & playlists | 12K+ |
-| **💰 Crypto Tracker** | Real-time crypto prices | 8K+ |
-| **🏠 Smart Home** | IoT device control | 6K+ |
-| **📧 Email Assistant** | Email management | 5K+ |
-| **🔒 Password Manager** | Secure credential access | 4K+ |
+| **🌤️ Weather Pro** | Advanced weather with radar | 0K+ |
+| **🎵 Spotify Control** | Music control & playlists | 0K+ |
+| **💰 Crypto Tracker** | Real-time crypto prices | 0K+ |
+| **🏠 Smart Home** | IoT device control | 0K+ |
+| **📧 Email Assistant** | Email management | 0K+ |
+| **🔒 Password Manager** | Secure credential access | 0K+ |
 
 ### 🛠️ Create Your Own Plugin
 
