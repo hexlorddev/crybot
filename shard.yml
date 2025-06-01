@@ -1,0 +1,30 @@
+name: crybot
+version: 1.0.0
+description: |
+  CryBot - Voice-Controlled Terminal Assistant
+  A blazing-fast voice assistant built in Crystal with AI integration
+
+authors:
+  - dineth nethsara <hexlorddev@github.com>
+
+crystal: 1.9.2
+
+license: MIT
+
+targets:
+  crybot:
+    main: src/crybot.cr
+
+dependencies:
+  openssl:
+    github: crystal-lang/crystal-openssl
+  json:
+    github: crystal-lang/crystal-json
+  http:
+    github: crystal-lang/crystal-http
+  colorize:
+    github: crystal-lang/colorize
+
+development_dependencies:
+  spec:
+    github: crystal-lang/crystal-spec

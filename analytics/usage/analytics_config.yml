@@ -1,0 +1,349 @@
+# CryBot Analytics Configuration
+# Comprehensive usage tracking and performance monitoring
+
+analytics:
+  enabled: true
+  version: "1.0.0"
+  privacy_mode: "local_only"  # local_only, anonymized, full
+  retention_days: 90
+  
+# Data collection settings
+collection:
+  # Voice interaction metrics
+  voice:
+    recognition_accuracy: true
+    response_times: true
+    wake_word_detection: true
+    failed_recognitions: true
+    language_detection: true
+    
+  # Command execution analytics  
+  commands:
+    execution_count: true
+    execution_time: true
+    success_rate: true
+    error_types: true
+    popular_commands: true
+    command_sequences: true
+    
+  # System performance metrics
+  performance:
+    cpu_usage: true
+    memory_usage: true
+    disk_usage: true
+    network_usage: true
+    startup_time: true
+    response_latency: true
+    
+  # Plugin analytics
+  plugins:
+    usage_statistics: true
+    performance_metrics: true
+    error_rates: true
+    installation_count: true
+    update_frequency: true
+    
+  # User behavior (anonymized)
+  behavior:
+    session_duration: true
+    daily_usage_patterns: true
+    feature_adoption: true
+    configuration_changes: true
+    theme_preferences: true
+
+# Metrics collection intervals
+intervals:
+  real_time: 1      # seconds - for critical metrics
+  frequent: 30      # seconds - for performance metrics  
+  regular: 300      # seconds - for usage statistics
+  daily: 86400      # seconds - for daily summaries
+  weekly: 604800    # seconds - for weekly reports
+
+# Key Performance Indicators (KPIs)
+kpis:
+  # Voice Recognition
+  - name: "voice_recognition_accuracy"
+    description: "Percentage of correctly recognized voice commands"
+    target: 95.0
+    threshold_warning: 90.0
+    threshold_critical: 85.0
+    
+  - name: "voice_response_time"
+    description: "Average time from voice input to response (ms)"
+    target: 500
+    threshold_warning: 1000
+    threshold_critical: 2000
+    
+  # System Performance  
+  - name: "cpu_usage_average"
+    description: "Average CPU usage percentage"
+    target: 5.0
+    threshold_warning: 15.0
+    threshold_critical: 25.0
+    
+  - name: "memory_usage_mb"
+    description: "Memory usage in megabytes"
+    target: 50
+    threshold_warning: 100
+    threshold_critical: 200
+    
+  # User Experience
+  - name: "command_success_rate"
+    description: "Percentage of successfully executed commands"
+    target: 98.0
+    threshold_warning: 95.0
+    threshold_critical: 90.0
+    
+  - name: "session_duration_minutes"
+    description: "Average session duration in minutes"
+    target: 30
+    threshold_warning: 5
+    threshold_critical: 2
+
+# Alert configurations
+alerts:
+  enabled: true
+  channels:
+    - type: "log"
+      level: "warning"
+      
+    - type: "notification"
+      title: "CryBot Performance Alert"
+      
+    - type: "email"
+      enabled: false
+      smtp_server: "smtp.gmail.com"
+      smtp_port: 587
+      
+  rules:
+    - name: "high_error_rate"
+      condition: "error_rate > 10%"
+      severity: "warning"
+      message: "High error rate detected: {error_rate}%"
+      
+    - name: "memory_leak"
+      condition: "memory_usage > 200MB AND trend = 'increasing'"
+      severity: "critical"
+      message: "Potential memory leak detected: {memory_usage}MB"
+      
+    - name: "voice_recognition_degraded"
+      condition: "voice_accuracy < 90%"
+      severity: "warning"
+      message: "Voice recognition accuracy degraded: {voice_accuracy}%"
+
+# Reporting configuration
+reports:
+  enabled: true
+  formats: ["json", "csv", "html"]
+  
+  # Daily summary report
+  daily:
+    enabled: true
+    time: "23:30"
+    includes:
+      - session_count
+      - total_commands
+      - average_response_time
+      - error_summary
+      - popular_commands
+      
+  # Weekly detailed report  
+  weekly:
+    enabled: true
+    day: "sunday"
+    time: "00:00"
+    includes:
+      - usage_trends
+      - performance_analysis
+      - feature_adoption
+      - error_analysis
+      - recommendations
+      
+  # Monthly comprehensive report
+  monthly:
+    enabled: true
+    day: 1
+    time: "00:00"
+    includes:
+      - complete_analytics
+      - trend_analysis
+      - performance_benchmarks
+      - user_behavior_insights
+      - optimization_suggestions
+
+# Data export settings
+export:
+  enabled: true
+  formats: ["json", "csv", "parquet"]
+  
+  automatic:
+    enabled: true
+    frequency: "weekly"
+    retention: "1_year"
+    compression: true
+    encryption: true
+    
+  manual:
+    max_records: 100000
+    date_range_limit: "1_year"
+
+# Privacy and compliance
+privacy:
+  # Data anonymization
+  anonymization:
+    enabled: true
+    hash_user_ids: true
+    remove_personal_data: true
+    aggregate_small_datasets: true
+    
+  # GDPR compliance
+  gdpr:
+    enabled: true
+    data_retention_days: 90
+    right_to_deletion: true
+    data_portability: true
+    consent_tracking: true
+    
+  # Data minimization
+  minimization:
+    collect_only_necessary: true
+    auto_cleanup_old_data: true
+    compress_historical_data: true
+
+# Dashboard configuration
+dashboard:
+  enabled: true
+  refresh_interval: 30  # seconds
+  
+  # Default widgets
+  widgets:
+    - type: "metric_card"
+      title: "Voice Recognition Accuracy"
+      metric: "voice_recognition_accuracy"
+      format: "percentage"
+      
+    - type: "metric_card"
+      title: "Response Time"
+      metric: "voice_response_time"
+      format: "milliseconds"
+      
+    - type: "line_chart"
+      title: "Commands Over Time"
+      metric: "commands_per_hour"
+      timerange: "24h"
+      
+    - type: "bar_chart"
+      title: "Popular Commands"
+      metric: "command_frequency"
+      limit: 10
+      
+    - type: "pie_chart"
+      title: "Command Categories"
+      metric: "command_categories"
+      
+    - type: "gauge"
+      title: "System Performance"
+      metrics: ["cpu_usage", "memory_usage"]
+      
+  # Real-time monitoring
+  realtime:
+    enabled: true
+    update_frequency: 5  # seconds
+    metrics:
+      - "current_cpu_usage"
+      - "current_memory_usage"
+      - "active_sessions"
+      - "commands_per_minute"
+
+# Integration settings
+integrations:
+  # Prometheus metrics export
+  prometheus:
+    enabled: false
+    port: 9091
+    path: "/metrics"
+    
+  # Grafana dashboards
+  grafana:
+    enabled: false
+    api_url: "http://localhost:3000"
+    
+  # External analytics services
+  external:
+    google_analytics:
+      enabled: false
+      tracking_id: ""
+      
+    mixpanel:
+      enabled: false
+      token: ""
+      
+    amplitude:
+      enabled: false
+      api_key: ""
+
+# Custom metrics
+custom_metrics:
+  - name: "plugin_load_time"
+    description: "Time taken to load plugins on startup"
+    type: "histogram"
+    buckets: [10, 50, 100, 500, 1000, 5000]
+    
+  - name: "cache_hit_rate"
+    description: "Percentage of cache hits vs misses"
+    type: "gauge"
+    
+  - name: "encryption_operations"
+    description: "Number of encryption/decryption operations"
+    type: "counter"
+    
+  - name: "voice_command_length"
+    description: "Length of voice commands in characters"
+    type: "histogram"
+    buckets: [5, 10, 20, 50, 100, 200]
+
+# Machine learning insights
+ml_insights:
+  enabled: true
+  
+  # Anomaly detection
+  anomaly_detection:
+    enabled: true
+    algorithms: ["isolation_forest", "statistical"]
+    sensitivity: "medium"
+    
+  # Predictive analytics
+  predictive:
+    enabled: true
+    models:
+      - "usage_prediction"
+      - "error_prediction"
+      - "performance_degradation"
+      
+  # Trend analysis
+  trends:
+    enabled: true
+    lookback_days: 30
+    confidence_threshold: 0.8
+
+# Debugging and diagnostics
+debugging:
+  enabled: true
+  
+  # Performance profiling
+  profiling:
+    enabled: false  # Enable only when needed
+    sample_rate: 0.01
+    include_stack_traces: true
+    
+  # Memory analysis
+  memory_analysis:
+    enabled: true
+    check_leaks: true
+    track_allocations: false
+    
+  # Error tracking
+  error_tracking:
+    enabled: true
+    include_context: true
+    stack_trace_depth: 10

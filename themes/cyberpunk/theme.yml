@@ -1,0 +1,101 @@
+# Cyberpunk 2024 Theme
+# The ultimate futuristic terminal experience
+
+theme:
+  name: "Cyberpunk 2024"
+  version: "2.1.0"
+  author: "hexlorddev"
+  description: "Neon-soaked terminal interface with digital rain effects"
+
+colors:
+  primary: "#00ff9f"        # Electric green
+  secondary: "#ff0080"      # Hot pink  
+  accent: "#00d4ff"         # Cyber blue
+  background: "#0a0a0a"     # Deep black
+  surface: "#1a1a1a"       # Dark gray
+  text: "#ffffff"          # Pure white
+  text_dim: "#888888"      # Gray text
+  error: "#ff3366"         # Red error
+  warning: "#ffaa00"       # Orange warning
+  success: "#00ff9f"       # Green success
+
+effects:
+  glow: true               # Text glow effects
+  matrix_rain: true        # Digital rain background
+  scan_lines: true         # CRT scan line effect
+  neon_borders: true       # Glowing borders
+  typewriter: true         # Typing animation
+  pulse: true              # Pulsing elements
+  chromatic: false         # Chromatic aberration
+
+fonts:
+  primary: "JetBrains Mono NL"
+  secondary: "Fira Code"
+  monospace: "Source Code Pro"
+  display: "Orbitron"
+
+sounds:
+  startup: "cyberpunk_boot.wav"
+  command: "digital_beep.wav"
+  success: "success_chime.wav"
+  error: "glitch_error.wav"
+  typing: "key_click.wav"
+  notification: "ping.wav"
+
+animations:
+  duration: 200            # Animation duration (ms)
+  easing: "ease-out"       # Animation easing
+  matrix_speed: 50         # Matrix rain speed
+  glow_intensity: 0.8      # Glow effect intensity
+  scan_speed: 2000         # Scan line speed (ms)
+
+ascii_art:
+  logo: |
+    ╔═══════════════════════════════════╗
+    ║   ▄████▄   ██▀███ ▓██   ██▓       ║
+    ║  ▒██▀ ▀█  ▓██ ▒ ██▒▒██  ██▒       ║
+    ║  ▒▓█    ▄ ▓██ ░▄█ ▒ ▒██ ██░       ║
+    ║  ▒▓▓▄ ▄██▒▒██▀▀█▄   ░ ▐██▓░       ║
+    ║  ▒ ▓███▀ ░░██▓ ▒██▒ ░ ██▒▓░       ║
+    ║  ░ ░▒ ▒  ░░ ▒▓ ░▒▓░  ██▒▒▒        ║
+    ║    ░  ▒     ░▒ ░ ▒░▓██ ░▒░        ║
+    ║  ░          ░░   ░ ▒ ▒ ░░         ║
+    ║  ░ ░         ░     ░ ░            ║
+    ║  ░                 ░ ░            ║
+    ╚═══════════════════════════════════╝
+
+prompts:
+  ready: "🧊🤖 CRYBOT.EXE LOADED // NEURAL.LINK.ACTIVE"
+  listening: "🎤 AUDIO.INPUT.DETECTED // PROCESSING..."
+  thinking: "🧠 NEURAL.NETWORKS.ENGAGED // COMPUTING..."
+  responding: "🗣️ VOICE.SYNTHESIS.ONLINE // TRANSMITTING..."
+  error: "❌ SYSTEM.ERROR.DETECTED // RETRY.PROTOCOL.INITIATED"
+
+borders:
+  style: "neon_double"
+  glow: true
+  thickness: 2
+  patterns:
+    - "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    - "╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋╋"
+    - "▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓"
+
+matrix:
+  enabled: true
+  characters: "アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789"
+  density: 0.05
+  speed: 50
+  color_fade: true
+  
+terminal:
+  cursor: "█"              # Block cursor
+  cursor_blink: true       # Blinking cursor
+  background_opacity: 0.95 # Slight transparency
+  blur: 5                  # Background blur
+  
+widgets:
+  clock_format: "HH:MM:SS"
+  date_format: "YYYY.MM.DD"
+  cpu_graph: true
+  memory_bar: true
+  network_indicator: true

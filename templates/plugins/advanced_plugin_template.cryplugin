@@ -1,0 +1,261 @@
+# 🌤️ Advanced Weather Plugin for CryBot
+# Provides comprehensive weather information with radar, forecasts, and alerts
+
+plugin_name: "Weather Pro"
+plugin_version: "3.2.1"
+plugin_author: "CryBot Weather Team"
+plugin_description: "Advanced weather plugin with forecasts, radar, and alerts"
+plugin_license: "MIT"
+plugin_website: "https://plugins.crybot.dev/weather-pro"
+
+# Plugin metadata
+metadata:
+  category: "utilities"
+  tags: ["weather", "forecast", "radar", "alerts"]
+  requires_internet: true
+  requires_location: true
+  min_crybot_version: "1.0.0"
+  max_crybot_version: "2.0.0"
+
+# Voice command triggers
+triggers:
+  - patterns:
+      - "weather"
+      - "what's the weather"
+      - "how's the weather"
+      - "weather forecast"
+      - "today's weather"
+    action: "get_current_weather"
+    
+  - patterns:
+      - "forecast"
+      - "weather forecast"
+      - "7 day forecast"
+      - "weekly forecast"
+    action: "get_forecast"
+    
+  - patterns:
+      - "radar"
+      - "weather radar"
+      - "rain radar"
+      - "storm radar"
+    action: "get_radar"
+    
+  - patterns:
+      - "weather alerts"
+      - "storm warnings"
+      - "weather warnings"
+    action: "get_alerts"
+    
+  - patterns:
+      - "weather in {location}"
+      - "forecast for {location}"
+      - "{location} weather"
+    action: "get_weather_for_location"
+    parameters:
+      - name: "location"
+        type: "string"
+        required: true
+
+# API configuration
+api:
+  primary:
+    name: "OpenWeatherMap"
+    base_url: "https://api.openweathermap.org/data/2.5"
+    api_key_env: "OPENWEATHER_API_KEY"
+    rate_limit: "1000/hour"
+    
+  secondary:
+    name: "WeatherAPI"
+    base_url: "https://api.weatherapi.com/v1"
+    api_key_env: "WEATHERAPI_KEY"
+    rate_limit: "1000000/month"
+
+# Plugin configuration
+config:
+  default_location: "auto"  # Auto-detect or set default city
+  units: "metric"           # metric, imperial, kelvin
+  cache_duration: 600       # Cache weather data for 10 minutes
+  show_extended: true       # Show detailed weather info
+  enable_alerts: true       # Enable weather alerts
+  enable_radar: true        # Enable radar images
+  voice_personality: "friendly"  # friendly, professional, casual
+
+# Response templates
+responses:
+  current_weather: |
+    The current weather in {location} is {condition} with a temperature of {temp}°{unit}.
+    Feels like {feels_like}°{unit}. Humidity is {humidity}% and wind speed is {wind_speed} {wind_unit}.
+    
+  forecast_today: |
+    Today's forecast for {location}: {condition} with a high of {high}°{unit} and low of {low}°{unit}.
+    {additional_info}
+    
+  forecast_week: |
+    Here's the 7-day forecast for {location}:
+    {daily_forecasts}
+    
+  weather_alert: |
+    ⚠️ Weather Alert for {location}: {alert_title}
+    {alert_description}
+    Valid until {alert_expires}
+    
+  no_alerts: |
+    No weather alerts for {location} at this time.
+    
+  error_api: |
+    I'm having trouble getting weather data right now. Please try again in a moment.
+    
+  error_location: |
+    I couldn't find weather information for "{location}". Please try a different location.
+
+# Plugin actions
+actions:
+  get_current_weather:
+    description: "Get current weather conditions"
+    api_endpoint: "/weather"
+    cache_key: "current_{location}"
+    
+  get_forecast:
+    description: "Get weather forecast"
+    api_endpoint: "/forecast"
+    cache_key: "forecast_{location}"
+    
+  get_radar:
+    description: "Get weather radar image"
+    api_endpoint: "/radar"
+    cache_key: "radar_{location}"
+    returns: "image"
+    
+  get_alerts:
+    description: "Get weather alerts"
+    api_endpoint: "/alerts"
+    cache_key: "alerts_{location}"
+
+# Plugin permissions
+permissions:
+  - "network_access"        # Access to make HTTP requests
+  - "location_access"       # Access to user's location
+  - "cache_access"          # Access to plugin cache
+  - "config_access"         # Access to plugin configuration
+  - "notification_access"   # Send notifications for alerts
+
+# Plugin settings UI
+settings:
+  - name: "api_key"
+    type: "password"
+    label: "OpenWeatherMap API Key"
+    description: "Get your free API key from openweathermap.org"
+    required: true
+    
+  - name: "default_location"
+    type: "text"
+    label: "Default Location"
+    description: "Default city for weather queries"
+    default: "auto"
+    
+  - name: "units"
+    type: "select"
+    label: "Temperature Units"
+    options:
+      - value: "metric"
+        label: "Celsius"
+      - value: "imperial"
+        label: "Fahrenheit"
+      - value: "kelvin"
+        label: "Kelvin"
+    default: "metric"
+    
+  - name: "enable_alerts"
+    type: "boolean"
+    label: "Enable Weather Alerts"
+    description: "Receive notifications for severe weather"
+    default: true
+    
+  - name: "alert_frequency"
+    type: "select"
+    label: "Alert Check Frequency"
+    options:
+      - value: "300"
+        label: "Every 5 minutes"
+      - value: "900"
+        label: "Every 15 minutes"
+      - value: "1800"
+        label: "Every 30 minutes"
+    default: "900"
+    depends_on: "enable_alerts"
+
+# Plugin lifecycle hooks
+hooks:
+  on_install:
+    - action: "validate_api_key"
+    - action: "setup_location"
+    - action: "create_cache_directory"
+    
+  on_enable:
+    - action: "start_alert_monitoring"
+    - action: "load_cached_data"
+    
+  on_disable:
+    - action: "stop_alert_monitoring"
+    - action: "cleanup_cache"
+    
+  on_update:
+    - action: "migrate_settings"
+    - action: "update_api_endpoints"
+    
+  on_uninstall:
+    - action: "remove_cache_directory"
+    - action: "cleanup_settings"
+
+# Plugin dependencies
+dependencies:
+  system:
+    - "curl"              # For API requests
+    - "jq"                # For JSON parsing
+    
+  crystal:
+    - "http"              # HTTP client
+    - "json"              # JSON parsing
+    - "openssl"           # HTTPS support
+    
+  optional:
+    - "imagemagick"       # For radar image processing
+
+# Plugin testing
+tests:
+  - name: "test_api_connection"
+    description: "Test API connectivity"
+    command: "test_weather_api"
+    
+  - name: "test_location_lookup"
+    description: "Test location resolution"
+    command: "test_location_resolution"
+    
+  - name: "test_voice_commands"
+    description: "Test voice command recognition"
+    commands:
+      - "weather"
+      - "forecast"
+      - "weather in London"
+
+# Plugin documentation
+documentation:
+  readme: "./docs/README.md"
+  api_reference: "./docs/API.md"
+  examples: "./examples/"
+  changelog: "./CHANGELOG.md"
+
+# Plugin monetization (optional)
+monetization:
+  type: "freemium"
+  free_features:
+    - "current_weather"
+    - "basic_forecast"
+  premium_features:
+    - "extended_forecast"
+    - "radar_images" 
+    - "weather_alerts"
+    - "historical_data"
+  price: "$2.99/month"
+  trial_period: "7 days"

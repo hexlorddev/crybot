@@ -1,0 +1,34 @@
+# CryBot Plugin Example
+# This is a .cryplugin file that demonstrates the plugin system
+
+plugin_name: "Example Plugin"
+plugin_version: "1.0.0"
+plugin_author: "dineth nethsara (hexlorddev)"
+plugin_description: "Example plugin showing basic functionality"
+
+# Command definitions
+commands:
+  - trigger: "hello world"
+    response: "Hello from CryBot plugin system!"
+    action_type: "simple_response"
+  
+  - trigger: "calculate"
+    response: "I can help with calculations"
+    action_type: "calculator"
+    
+  - trigger: "tell me a joke"
+    response: "Why did the Crystal developer break up with Ruby? Because Crystal was too fast for them!"
+    action_type: "simple_response"
+  
+  - trigger: "system info"
+    response: "Gathering system information..."
+    action_type: "system_command"
+    command: "uname -a && free -h && df -h"
+
+# Plugin settings
+settings:
+  enabled: true
+  priority: 1
+  requires_internet: false
+  
+# This would be expanded into a full Crystal class in a real implementation

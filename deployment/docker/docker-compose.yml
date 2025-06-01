@@ -1,0 +1,138 @@
+version: '3.8'
+
+services:
+  crybot:
+    build: .
+    image: hexlorddev/crybot:latest
+    container_name: crybot_main
+    restart: unless-stopped
+    devices:
+      - /dev/snd:/dev/snd
+    volumes:
+      - crybot_data:/app/data
+      - crybot_logs:/app/logs
+      - crybot_plugins:/app/plugins
+      - ./configs:/app/configs:ro
+    environment:
+      - CRYBOT_ENV=production
+      - CRYBOT_LOG_LEVEL=info
+      - CRYBOT_ENCRYPTION=true
+      - CRYBOT_THEME=cyberpunk
+    ports:
+      - "8080:8080"  # Web dashboard
+      - "8081:8081"  # API server
+    networks:
+      - crybot_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  crybot_web:
+    build: ./web/dashboard
+    image: hexlorddev/crybot-web:latest
+    container_name: crybot_web
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - REACT_APP_API_URL=http://crybot:8081
+    depends_on:
+      - crybot
+    networks:
+      - crybot_network
+
+  crybot_db:
+    image: postgres:14-alpine
+    container_name: crybot_db
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=crybot
+      - POSTGRES_USER=crybot
+      - POSTGRES_PASSWORD_FILE=/run/secrets/db_password
+    volumes:
+      - crybot_db_data:/var/lib/postgresql/data
+      - ./deployment/docker/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - crybot_network
+    secrets:
+      - db_password
+
+  crybot_redis:
+    image: redis:7-alpine
+    container_name: crybot_redis
+    restart: unless-stopped
+    command: redis-server --requirepass_file /run/secrets/redis_password
+    volumes:
+      - crybot_redis_data:/data
+    networks:
+      - crybot_network
+    secrets:
+      - redis_password
+
+  crybot_monitoring:
+    image: prom/prometheus:latest
+    container_name: crybot_monitoring
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - crybot_prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+    networks:
+      - crybot_network
+
+  crybot_grafana:
+    image: grafana/grafana:latest
+    container_name: crybot_grafana
+    restart: unless-stopped
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD_FILE=/run/secrets/grafana_password
+    volumes:
+      - crybot_grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards
+      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources
+    networks:
+      - crybot_network
+    secrets:
+      - grafana_password
+    depends_on:
+      - crybot_monitoring
+
+volumes:
+  crybot_data:
+    driver: local
+  crybot_logs:
+    driver: local
+  crybot_plugins:
+    driver: local
+  crybot_db_data:
+    driver: local
+  crybot_redis_data:
+    driver: local
+  crybot_prometheus_data:
+    driver: local
+  crybot_grafana_data:
+    driver: local
+
+networks:
+  crybot_network:
+    driver: bridge
+
+secrets:
+  db_password:
+    file: ./deployment/docker/secrets/db_password.txt
+  redis_password:
+    file: ./deployment/docker/secrets/redis_password.txt
+  grafana_password:
+    file: ./deployment/docker/secrets/grafana_password.txt
